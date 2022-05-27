@@ -1,0 +1,61 @@
+#!/bin/bash
+
+dot_dirs="./home"
+
+create_dirs() {
+    for dir in $dot_dirs; do
+        if [ -d "$dir" ]; then
+            pushd $dir
+                to_create=$(find . -mindepth 1 -type d -printf "%P ")
+                for d in $to_create; do
+                    mkdir -p "$HOME/$d"
+                done
+            popd
+        fi
+    done
+}
+
+create_links() {
+    for dir in $dot_dirs; do
+        if [ -d "$dir" ]; then
+            pushd $dir
+                to_create=$(find . -mindepth 1 -type f -printf "%P ")
+                for d in $to_create; do
+                    ln -sf "$(pwd)/$d" "$HOME/$d"
+                done
+            popd
+        fi
+    done
+}
+
+configure_neovim() {
+    dest="${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/pack/packer/start/packer.nvim
+    if [ ! -d "$dest" ]; then
+	git clone --depth 1 https://github.com/wbthomason/packer.nvim $dest
+    fi
+}
+
+configure_gnome() {
+    dconf load / < dconf-settings.ini
+}
+
+get_fonts() {
+    url=$(curl -s https://api.github.com/repos/tonsky/FiraCode/releases/latest | jq -r '.assets[0].browser_download_url')
+    wget -o /dev/null -O ~/Downloads/fira_code.zip "$url"
+    mkdir -p ~/.local/share/fonts
+    unzip -d ~/Downloads/fira_code ~/Downloads/fira_code.zip
+    cp ~/Downloads/fira_code/ttf/* ~/.local/share/fonts/.
+    rm -rf ~/Downloads/fira_code
+    rm ~/Downloads/fira_code.zip
+
+    wget -o /dev/null -O ~/.local/share/fonts/"Symbols-2048-em Nerd Font Complete Mono.ttf" https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/NerdFontsSymbolsOnly/complete/Symbols-2048-em%20Nerd%20Font%20Complete%20Mono.ttf?raw=true
+
+    wget -o /dev/null -O ~/.local/share/fonts/"Symbols-1000-em Nerd Font Complete Mono.ttf" https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/NerdFontsSymbolsOnly/complete/Symbols-1000-em%20Nerd%20Font%20Complete%20Mono.ttf?raw=true
+    fc-cache -f
+}
+
+create_dirs
+create_links
+configure_neovim
+configure_gnome
+get_fonts

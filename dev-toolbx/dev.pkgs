@@ -1,0 +1,14 @@
+@development-tools
+clang
+clang-tools-extra
+cmake
+composer
+fzf
+gcc-c++
+git
+golang
+jq
+neovim
+nodejs
+php
+ripgrep

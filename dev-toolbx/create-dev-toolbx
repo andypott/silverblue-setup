@@ -1,0 +1,9 @@
+#!/bin/bash
+
+pkgs=$(cat ./*.pkgs)
+
+toolbox create dev
+toolbox run -c dev sudo dnf -y update --refresh
+toolbox run -c dev sudo dnf -y install $pkgs
+toolbox run -c dev cd "$HOME" && curl -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
+toolbox run -c dev "$(pwd)/configure-lang-servers"
