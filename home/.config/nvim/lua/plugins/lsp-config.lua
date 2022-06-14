@@ -82,12 +82,14 @@ capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 -- map buffer local keybindings when the language server attaches
 local servers = {
     'bashls',
+    'clangd',
     'cssls' ,
     'eslint',
     'gopls',
     'html',
     'jsonls',
-    'rls',
+    --'rls',
+    'rust_analyzer',
     'tsserver',
 }
 local lspconfig = require('lspconfig')

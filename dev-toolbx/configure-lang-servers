@@ -22,7 +22,7 @@ function installServers() {
     getLatestLuaLS
     getNodeServers
     getGopls
-    getRls
+    getRlsAndAnalyzer
 
     popd >/dev/null
 }
@@ -32,9 +32,11 @@ function getGopls() {
     go install golang.org/x/tools/cmd/goimports@latest
 }
 
-function getRls() {
+function getRlsAndAnalyzer() {
     ~/.cargo/bin/rustup update
     ~/.cargo/bin/rustup component add rls rust-analysis rust-src
+    curl -L https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/rust-analyzer-x86_64-unknown-linux-gnu.gz | gunzip -c - > bin/rust-analyzer
+    chmod +x bin/rust-analyzer
 }
 
 function getLatestLuaLS() {

@@ -22,6 +22,7 @@ vim.api.nvim_exec(
         autocmd BufWritePre *.js,*.jsx,*.ts,*.tsx call v:lua.ajp.jsfmt()
         autocmd BufWritePre *.css call v:lua.ajp.cssfmt()
         autocmd BufWritePre *.go call v:lua.ajp.gofmt()
+        autocmd BufWritePre *.rs call v:lua.ajp.rustfmt()
     ]],
     false
 )
@@ -38,6 +39,10 @@ end
 
 function ajp.gofmt()
     ajp.format("goimports", false)
+end
+
+function ajp.rustfmt()
+    ajp.format("rustfmt", false)
 end
 
 function ajp.format(cmd, alert)
