@@ -18,7 +18,8 @@ sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub
 flatpak install flathub\
     org.mozilla.firefox\
     org.videolan.VLC\
-    com.valvesoftware.Steam
+    com.valvesoftware.Steam\
+    org.gnome.Lollypop
 
 sudo flatpak override --socket=wayland --env=MOZ_ENABLE_WAYLAND=1 org.mozilla.firefox
 
@@ -34,8 +35,13 @@ sudo rsync -rv ./system/ /
 # Enable systemd services
 sudo rpm-ostree reload
 sudo systemctl enable rpm-ostreed-automatic.timer --now
+sudo systemctl enable sshd
 
 # Add udev rules for steam
 git clone https://github.com/ValveSoftware/steam-devices /tmp/steam-devices
 sudo cp /tmp/steam-devices/*.rules /etc/udev/rules.d/.
 rm -rf /tmp/steam-devices
+
+if [ "$1" == "razerbook" ]; then
+    sudo rpm-ostree kargs --append-if-missing=i915.enable_psr=0
+fi
