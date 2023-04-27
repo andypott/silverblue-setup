@@ -1,0 +1,1 @@
+/var/home/andy/setup/shared_desktop/home/.config/nvim/lua/plugins/telescope.lua
